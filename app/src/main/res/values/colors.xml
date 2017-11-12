@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="color_text_reset">#cccccc</color>
+    <color name="color_text_work">#ffffff</color>
+    <color name="color_text_on_duty">#ffffff</color>
+    <color name="color_text_custom_clock">#ffffff</color>
+    <color name="color_circle_work">#5CACEE</color>
+    <color name="color_circle_on_duty">#FF0000</color>
+    <color name="color_circle_custom_clock">#FF4040</color>
+</resources>
