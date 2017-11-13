@@ -4,15 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import com.wqlin.clock.R;
 import com.wqlin.clock.entity.BaseTimeEntity;
 import com.wqlin.clock.entity.ClockTimeEntity;
@@ -49,11 +50,31 @@ public class ClockTimeActivity extends AppCompatActivity {
 
     private void initView() {
         rvList = findViewById(R.id.rv_list);
+        rvList.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new ClockTimeAdapter(data);
         rvList.setAdapter(mAdapter);
+        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                switch (view.getId()) {
+                    case R.id.tv_add_clock_time:
+                        showTimeDialog(0,0,0);
+                        break;
+                }
+            }
+        });
 
     }
 
+    private void showTimeDialog(int hourOfDay, int minute, int second) {
+        TimePickerDialog dialog = TimePickerDialog.newInstance(new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+
+            }
+        }, hourOfDay, minute, second, true);
+        dialog.show(getFragmentManager(), "time");
+    }
     private void initData() {
         mClockTimeList = getClockTime();
         int size = mClockTimeList.size();
@@ -137,11 +158,8 @@ public class ClockTimeActivity extends AppCompatActivity {
             switch (type) {
                 case BaseTimeEntity.TYPE_ITEM_HEAFER:
                     HeaderTimeEntity headerTimeEntity = (HeaderTimeEntity) item;
-                    if (headerTimeEntity.getCount() == 0) {
-                        helper.setVisible(R.id.tv_add_clock_time, true);
-                    } else {
-                        helper.setVisible(R.id.tv_add_clock_time, false);
-                    }
+                    helper.setText(R.id.tv_time_title, headerTimeEntity.getTitle());
+                    helper.addOnClickListener(R.id.tv_add_clock_time);
                     break;
                 case BaseTimeEntity.TYPE_ITEM_TIME:
 
