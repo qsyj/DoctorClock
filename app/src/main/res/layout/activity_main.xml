@@ -1,18 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
+    android:orientation="vertical"
     tools:context="com.wqlin.clock.ui.MainActivity">
-    <LinearLayout
+    <include layout="@layout/include_toolbar"/>
+    <include layout="@layout/include_bar_div"/>
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <com.wqlin.clock.widget.CalendarView
-            android:id="@+id/layout_day_picker"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-</ScrollView>
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.wqlin.clock.widget.CalendarView
+                android:id="@+id/layout_day_picker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/tv_goto_time"
+                android:layout_marginTop="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:padding="15dp"
+                android:onClick="onClick"
+                android:text="查看闹钟"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

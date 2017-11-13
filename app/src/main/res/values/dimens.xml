@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="leley_bar_height">48dp</dimen>
+    <dimen name="actionbar_height">48dp</dimen>
+    <dimen name="actionbar_text_size">16sp</dimen>
+    <dimen name="actionbar_title_size">18sp</dimen>
+    <color name="bar_bg_color_pressed">#ff3276ae</color>
+</resources>

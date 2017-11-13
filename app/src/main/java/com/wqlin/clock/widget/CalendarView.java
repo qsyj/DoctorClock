@@ -1,16 +1,21 @@
 package com.wqlin.clock.widget;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.wdullaer.materialdatetimepicker.HapticFeedbackController;
 import com.wdullaer.materialdatetimepicker.Utils;
 import com.wdullaer.materialdatetimepicker.date.DatePickerController;
@@ -19,16 +24,20 @@ import com.wdullaer.materialdatetimepicker.date.DateRangeLimiter;
 import com.wdullaer.materialdatetimepicker.date.DefaultDateRangeLimiter;
 import com.wdullaer.materialdatetimepicker.date.MonthAdapter;
 import com.wdullaer.materialdatetimepicker.date.MonthView;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import com.wqlin.clock.R;
 import com.wqlin.clock.entity.CalendarEntity;
 import com.wqlin.clock.entity.DayEntity;
+import com.wqlin.clock.utils.PrefUtils;
 import com.wqlin.clock.view.DoctorMonthView;
+import com.wqlin.clock.widget.basepopup.entity.LocationType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
@@ -39,10 +48,12 @@ import java.util.TimeZone;
  * @date 2017/11/10 14:19
  */
 public class CalendarView extends FrameLayout implements DatePickerController ,MonthView.OnDayClickListener ,View.OnClickListener,DoctorMonthView.DateSelectController{
-    private LinearLayout llRoot;
-    private TextView tvTitle ,tvSure;
+    private RelativeLayout rlRoot;
+    private LinearLayout llBottom;
+    private TextView tvTitle ,tvSure,tvTitleTime;
     private DoctorMonthView viewMonth;
 
+    private boolean isEdit = false;
     private Calendar mCalendar = Utils.trimToMidnight(Calendar.getInstance(getTimeZone()));
     private HashSet<Calendar> highlightedDays = new HashSet<>();
     private HashSet<OnDateChangedListener> mListeners = new HashSet<>();
@@ -61,6 +72,10 @@ public class CalendarView extends FrameLayout implements DatePickerController ,M
     private DoctorMonthView.MonthViewEntity mWorkMonthViewEntity;
     private DoctorMonthView.MonthViewEntity mOnDutyMonthViewEntity;
     private DoctorMonthView.MonthViewEntity mCustomClockMonthViewEntity;
+    private SpinnerPopWindow mModePopup;
+    private TextView tvMode;
+    private TimePickerDialog mTimePickerDialog;
+
     public CalendarView(@NonNull Context context) {
         this(context, null);
     }
@@ -103,15 +118,18 @@ public class CalendarView extends FrameLayout implements DatePickerController ,M
     }
 
     private void initView() {
-        llRoot = findViewById(R.id.ll_root);
+        rlRoot = findViewById(R.id.ll_root);
         tvTitle = findViewById(R.id.tv_title);
         tvSure = findViewById(R.id.tv_sure);
+        tvMode = findViewById(R.id.tv_mode);
+        tvMode.setOnClickListener(this);
         tvSure.setOnClickListener(this);
         viewMonth =createMonthView(getContext()) ;
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.MATCH_PARENT);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        params.addRule(RelativeLayout.BELOW,R.id.rl_top);
         viewMonth.setLayoutParams(params);
         viewMonth.setOnDayClickListener(this);
-        llRoot.addView(viewMonth);
+        rlRoot.addView(viewMonth);
     }
 
     public DoctorMonthView createMonthView(Context context) {
@@ -122,7 +140,15 @@ public class CalendarView extends FrameLayout implements DatePickerController ,M
         mCalendar.set(Calendar.YEAR, year);
         mCalendar.set(Calendar.MONTH, monthOfYear);
         mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        mDayList = createDayList(mCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        String jsonStr=PrefUtils.getString(getContext(), getPreKey(year, monthOfYear));
+        List<DayEntity> dayEntityList=null;
+        if (!TextUtils.isEmpty(jsonStr)) {
+            CalendarEntity calendarEntity=JSONObject.parseObject(jsonStr, CalendarEntity.class);
+            if (calendarEntity != null&&calendarEntity.getYear()==year&&calendarEntity.getMonth()==monthOfYear) {
+                dayEntityList = calendarEntity.getDayList();
+            }
+        }
+        mDayList = createDayList(dayEntityList,mCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         updataMonthView();
     }
 
@@ -249,7 +275,7 @@ public class CalendarView extends FrameLayout implements DatePickerController ,M
 
     @Override
     public void onDayClick(MonthView view, MonthAdapter.CalendarDay day) {
-        if (day != null) {
+        if (day != null&&isEdit) {
             onDayTapped(day);
         }
     }
@@ -273,7 +299,7 @@ public class CalendarView extends FrameLayout implements DatePickerController ,M
     private int switchDayMode(int mode) {
         return mode == mDateSelectMode ? DayEntity.MODE_DATE_RESET : mDateSelectMode;
     }
-    private Map<Integer,DayEntity> createDayList(int maxDay) {
+    private Map<Integer,DayEntity> createDayList(List<DayEntity> dayEntityList,int maxDay) {
         Map<Integer, DayEntity> map = new HashMap<>();
         map.clear();
         int max = maxDay + 1;
@@ -285,17 +311,91 @@ public class CalendarView extends FrameLayout implements DatePickerController ,M
             list.add(dayEntity);
             map.put(i, dayEntity);
         }
+        if (dayEntityList != null) {
+            for (DayEntity dayEntity:
+                    dayEntityList) {
+                int day=dayEntity.getDay();
+                if (map.containsKey(day)) {
+                    map.put(day, dayEntity);
+                }
+            }
+        }
         return map;
     }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_sure:
-
+                String text = tvSure.getText().toString();
+                if (text.equals("编辑")) {
+                    tvSure.setText("确定");
+                    isEdit = true;
+                    tvMode.setVisibility(VISIBLE);
+                    tvMode.setText("值班");
+                    mDateSelectMode = DayEntity.MODE_DATE_ON_DUTY;
+                } else if (text.equals("确定")){
+                    tvSure.setText("编辑");
+                    isEdit = false;
+                    tvMode.setVisibility(GONE);
+                    //TODO 保存数据到本地
+                    saveData();
+                }
+                break;
+            case R.id.tv_mode:
+                showModePopup();
                 break;
         }
     }
 
+    private void saveData() {
+        int year = mCalendar.get(Calendar.YEAR);
+        int month = mCalendar.get(Calendar.MONTH);
+        mCalendarEntity.setYear(year);
+        mCalendarEntity.setMonth(month);
+        List<DayEntity> dayEntityList = new ArrayList<>();
+        Iterator<Map.Entry<Integer, DayEntity>> iterator = mDayList.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<Integer, DayEntity> entry = iterator.next();
+            dayEntityList.add(entry.getValue());
+        }
+        mCalendarEntity.setDayList(dayEntityList);
+        String json=JSONObject.toJSONString(mCalendarEntity);
+        String key = getPreKey(year, month);
+        PrefUtils.putString(getContext(), key, json);
+    }
+
+    private String getPreKey(int year, int month) {
+        return year + "_" + month;
+    }
+    public void showModePopup() {
+        ArrayList<SpinnerPopWindow.ItemInfo> list = new ArrayList<>();
+        ArrayList<String> textList = new ArrayList<>();
+        textList.add("休息");
+        textList.add("值班");
+        textList.add("上班");
+        ArrayList<Integer> tagList = new ArrayList<>();
+        tagList.add(DayEntity.MODE_DATE_RESET);
+        tagList.add(DayEntity.MODE_DATE_ON_DUTY);
+        tagList.add(DayEntity.MODE_DATE_WORK);
+        for (int i = 0; i < textList.size(); i++) {
+            SpinnerPopWindow.ItemInfo itemInfo=new SpinnerPopWindow.ItemInfo(textList.get(i), i);
+            itemInfo.setTag(tagList.get(i));
+            list.add(itemInfo);
+        }
+        mModePopup = new SpinnerPopWindow((Activity) getContext(), list);
+        mModePopup.setItemSelectListener(new SpinnerPopWindow.ItemSelectListener() {
+            @Override
+            public void onItemClick(SpinnerPopWindow.ItemInfo itemInfo) {
+                showMode(itemInfo);
+            }
+        });
+        mModePopup.show(tvMode, LocationType.LEFT_BOTTOM_LEFT_TOP);
+    }
+
+    private void showMode(SpinnerPopWindow.ItemInfo itemInfo) {
+        mDateSelectMode = (int)itemInfo.getTag();
+        tvMode.setText(itemInfo.getText());
+    }
     private DoctorMonthView.MonthViewEntity createMonthViewEntity(int year, int month, int day) {
         DayEntity dayEntity;
         if (mDayList.containsKey(day)) {
@@ -303,8 +403,8 @@ public class CalendarView extends FrameLayout implements DatePickerController ,M
         } else {
             dayEntity = new DayEntity();
             dayEntity.setDay(day);
-            dayEntity.setSeletMode(mDateSelectMode);
             mDayList.put(day, dayEntity);
+            dayEntity.setSeletMode(mDateSelectMode);
         }
         DoctorMonthView.MonthViewEntity monthViewEntity = getMonthViewEntity(dayEntity.getSeletMode(), day);
         return monthViewEntity;
@@ -360,6 +460,7 @@ public class CalendarView extends FrameLayout implements DatePickerController ,M
         }
         return monthViewEntity;
     }
+
     @Override
     public DoctorMonthView.MonthViewEntity getMonthViewEntity(int year, int month, int day) {
         return createMonthViewEntity(year,month,day);

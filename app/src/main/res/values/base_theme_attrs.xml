@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="theme_color" format="color"></attr>
+    <attr name="infoTextColor" format="color" />
+    <attr name="layout_bg_normal" format="color" />
+    <attr name="bar_height" format="reference"></attr>
+    <attr name="bar_text_title_size" format="reference"></attr>
+    <attr name="bar_text_title_color" format="reference"></attr>
+    <attr name="bar_text_size" format="reference"></attr>
+    <attr name="bar_back_img" format="reference"></attr>
+    <attr name="bar_btn_bg" format="reference"></attr>
+    <attr name="bar_bg_color_pressed" format="reference"></attr>
+    <attr name="bg_default_page" format="reference"></attr>
+    <attr name="bar_bg_color" format="reference"></attr>
+    <attr name="bar_ic_navigation" format="reference"></attr>
+</resources>

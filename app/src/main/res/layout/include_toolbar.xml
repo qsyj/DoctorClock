@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:toolbar="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/bar_height"
+    android:background="?attr/bar_bg_color"
+    android:navigationIcon="?attr/bar_ic_navigation"
+    toolbar:navigationIcon="?attr/bar_ic_navigation"
+    >
+
+    <TextView
+        android:id="@+id/toolbar_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="3dp"
+        android:textColor="@color/gray"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/toolbar_title"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:lines="1"
+        android:textColor="?attr/bar_text_title_color"
+        android:textSize="?attr/bar_text_title_size" />
+
+    <TextView
+        android:id="@+id/toolbar_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:paddingRight="16dp"
+        android:textColor="@color/gray"
+        android:textSize="16sp"
+        android:visibility="gone" />
+</android.support.v7.widget.Toolbar>

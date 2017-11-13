@@ -1,65 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/ll_root"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/ll_root"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
     <RelativeLayout
+        android:id="@+id/rl_top"
         android:layout_width="match_parent"
         android:layout_height="50dp">
+
         <TextView
             android:id="@+id/tv_title"
-            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textSize="14sp"
-            android:text="2016.8.14"/>
-        <LinearLayout
-            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:text="2016.8.14"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/tv_mode"
+            android:layout_width="50dp"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:padding="3dp"
-                android:gravity="center"
-                android:text="休息"
-                android:textColor="@android:color/white"
-                android:background="#B3EE3A"
-                android:textSize="12sp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="2dp"
-                android:padding="3dp"
-                android:gravity="center"
-                android:text="值班"
-                android:textColor="@color/color_text_on_duty"
-                android:background="@color/color_circle_on_duty"
-                android:textSize="12sp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="2dp"
-                android:padding="3dp"
-                android:gravity="center"
-                android:text="上班"
-                android:textColor="@color/color_text_work"
-                android:background="@color/color_circle_work"
-                android:textSize="12sp"/>
-        </LinearLayout>
+            android:background="@android:color/holo_red_light"
+            android:gravity="center"
+            android:padding="3dp"
+            android:text="请选择类型"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/tv_sure"
-            android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
-            android:gravity="center"
-            android:textSize="16sp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
             android:background="#ff3e94da"
-            android:textColor="@android:color/white"
-            android:text="确定"
+            android:gravity="center"
             android:padding="8dp"
-            android:layout_height="match_parent"/>
+            android:text="编辑"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"/>
     </RelativeLayout>
 
-</LinearLayout>
+</RelativeLayout>
