@@ -1,5 +1,7 @@
 package com.wqlin.clock.entity;
 
+import com.wqlin.clock.utils.AppUtils;
+
 /**
  * @author wangql
  * @email wangql@leleyuntech.com
@@ -12,20 +14,7 @@ public class HeaderTimeEntity extends BaseTimeEntity {
     public HeaderTimeEntity(int seletMode, int count) {
         super(seletMode);
         this.count = count;
-        switch (seletMode) {
-            case DayEntity.MODE_DATE_RESET:
-                setTitle("休息");
-                break;
-            case DayEntity.MODE_DATE_WORK:
-                setTitle("工作");
-                break;
-            case DayEntity.MODE_DATE_ON_DUTY:
-                setTitle("值班");
-                break;
-            case DayEntity.MODE_DATE_CUSTOM_CLOCK:
-                setTitle("休息");
-                break;
-        }
+        setTitle(AppUtils.getSelectModeText(seletMode));
     }
 
     public String getTitle() {

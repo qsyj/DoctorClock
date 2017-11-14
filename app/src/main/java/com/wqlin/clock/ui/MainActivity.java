@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.wqlin.clock.R;
 import com.wqlin.clock.base.BaseActivity;
+import com.wqlin.clock.utils.AppUtils;
 import com.wqlin.clock.widget.Bar;
 
 import java.util.Calendar;
@@ -17,6 +18,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         setContentView(R.layout.activity_main);
         initView();
         initBar();
+        AppUtils.startClock(this);
     }
 
     private void initView() {

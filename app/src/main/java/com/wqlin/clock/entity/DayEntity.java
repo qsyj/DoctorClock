@@ -1,5 +1,7 @@
 package com.wqlin.clock.entity;
 
+import com.wqlin.clock.utils.AppUtils;
+
 /**
  * @author wangql
  * @email wangql@leleyuntech.com
@@ -23,7 +25,7 @@ public class DayEntity {
      */
     public static final int MODE_DATE_CUSTOM_CLOCK=3;
     private int day;
-    private int seletMode;
+    private int seletMode= AppUtils.DEFAULT_SELECT_MODE;
 
     public int getDay() {
         return day;

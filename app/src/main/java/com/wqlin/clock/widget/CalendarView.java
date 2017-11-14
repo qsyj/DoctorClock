@@ -28,7 +28,7 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import com.wqlin.clock.R;
 import com.wqlin.clock.entity.CalendarEntity;
 import com.wqlin.clock.entity.DayEntity;
-import com.wqlin.clock.utils.PrefUtils;
+import com.wqlin.clock.utils.AppUtils;
 import com.wqlin.clock.view.DoctorMonthView;
 import com.wqlin.clock.widget.basepopup.entity.LocationType;
 
@@ -90,6 +90,7 @@ public class CalendarView extends FrameLayout implements DatePickerController ,M
     }
 
     private void init() {
+        initCalendarEntity();
         inflate(getContext(), R.layout.view_calendar, this);
         if (mAccentColor == -1) {
             mAccentColor = Utils.getAccentColorFromThemeIfAvailable(getContext());
@@ -140,13 +141,10 @@ public class CalendarView extends FrameLayout implements DatePickerController ,M
         mCalendar.set(Calendar.YEAR, year);
         mCalendar.set(Calendar.MONTH, monthOfYear);
         mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        String jsonStr=PrefUtils.getString(getContext(), getPreKey(year, monthOfYear));
         List<DayEntity> dayEntityList=null;
-        if (!TextUtils.isEmpty(jsonStr)) {
-            CalendarEntity calendarEntity=JSONObject.parseObject(jsonStr, CalendarEntity.class);
-            if (calendarEntity != null&&calendarEntity.getYear()==year&&calendarEntity.getMonth()==monthOfYear) {
-                dayEntityList = calendarEntity.getDayList();
-            }
+        CalendarEntity calendarEntity = AppUtils.getCalendarEntity(getContext(), year, monthOfYear);
+        if (calendarEntity != null) {
+            dayEntityList = calendarEntity.getDayList();
         }
         mDayList = createDayList(dayEntityList,mCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         updataMonthView();
@@ -160,12 +158,13 @@ public class CalendarView extends FrameLayout implements DatePickerController ,M
         viewMonth.invalidate();
     }
 
-    public CalendarEntity getCalendarEntity() {
+    public CalendarEntity initCalendarEntity() {
         if (mCalendarEntity == null) {
             mCalendarEntity = new CalendarEntity();
         }
         return mCalendarEntity;
     }
+
     public void setMonthParams(int selectedDay, int year, int month, int weekStart) {
         viewMonth.setMonthParams(selectedDay,year,month,weekStart);
     }
@@ -281,8 +280,8 @@ public class CalendarView extends FrameLayout implements DatePickerController ,M
     }
 
     protected void onDayTapped(MonthAdapter.CalendarDay day) {
-        getCalendarEntity().setYear(day.year);
-        getCalendarEntity().setMonth(day.month);
+        mCalendarEntity.setYear(day.year);
+        mCalendarEntity.setMonth(day.month);
         DayEntity dayEntity;
         if (mDayList.containsKey(day.day)) {
             dayEntity = mDayList.get(day.day);
@@ -359,20 +358,15 @@ public class CalendarView extends FrameLayout implements DatePickerController ,M
             dayEntityList.add(entry.getValue());
         }
         mCalendarEntity.setDayList(dayEntityList);
-        String json=JSONObject.toJSONString(mCalendarEntity);
-        String key = getPreKey(year, month);
-        PrefUtils.putString(getContext(), key, json);
+        AppUtils.putCalendarEntity(getContext(),mCalendarEntity,year,month);
     }
 
-    private String getPreKey(int year, int month) {
-        return year + "_" + month;
-    }
     public void showModePopup() {
         ArrayList<SpinnerPopWindow.ItemInfo> list = new ArrayList<>();
         ArrayList<String> textList = new ArrayList<>();
-        textList.add("休息");
-        textList.add("值班");
-        textList.add("上班");
+        textList.add(AppUtils.TEXT_RESET);
+        textList.add(AppUtils.TEXT_ON_DUTY);
+        textList.add(AppUtils.TEXT_WORK);
         ArrayList<Integer> tagList = new ArrayList<>();
         tagList.add(DayEntity.MODE_DATE_RESET);
         tagList.add(DayEntity.MODE_DATE_ON_DUTY);

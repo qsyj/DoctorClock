@@ -11,6 +11,14 @@ public class ClockTimeEntity {
     private int seletMode;
     private List<TimeEntity> timeList;
 
+    public ClockTimeEntity() {
+    }
+
+    public ClockTimeEntity(int seletMode, List<TimeEntity> timeList) {
+        this.seletMode = seletMode;
+        this.timeList = timeList;
+    }
+
     public int getSeletMode() {
         return seletMode;
     }

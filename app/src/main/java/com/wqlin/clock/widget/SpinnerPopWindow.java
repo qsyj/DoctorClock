@@ -100,8 +100,13 @@ public class SpinnerPopWindow extends BasePopupWindow {
         int rootViewMeasuredWidth = mRootView.getMeasuredWidth();
         if (rootViewMeasuredWidth < getMinWidth()) {
             ViewGroup.LayoutParams rootViewP = mRootView.getLayoutParams();
-            rootViewP.width = getMinWidth();
-            mRootView.setLayoutParams(rootViewP);
+            int childCount = mRootView.getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                View childView = mRootView.getChildAt(i);
+                ViewGroup.LayoutParams childP = childView.getLayoutParams();
+                childP.width = getMinWidth();
+                childView.setLayoutParams(childP);
+            }
         }
     }
 

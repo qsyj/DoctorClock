@@ -3,11 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/DatePicker/DatePicker.iml" filepath="$PROJECT_DIR$/DatePicker/DatePicker.iml" />
-      <module fileurl="file://D:\project\github\DoctorClock\DatePicker\DatePicker.iml" filepath="D:\project\github\DoctorClock\DatePicker\DatePicker.iml" />
       <module fileurl="file://$PROJECT_DIR$/DoctorClock.iml" filepath="$PROJECT_DIR$/DoctorClock.iml" />
-      <module fileurl="file://D:\project\github\DoctorClock\DoctorClock.iml" filepath="D:\project\github\DoctorClock\DoctorClock.iml" />
+      <module fileurl="file://$PROJECT_DIR$/alarmmanagerclock/alarmmanagerclock.iml" filepath="$PROJECT_DIR$/alarmmanagerclock/alarmmanagerclock.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://D:\project\github\DoctorClock\app\app.iml" filepath="D:\project\github\DoctorClock\app\app.iml" />
     </modules>
   </component>
 </project>

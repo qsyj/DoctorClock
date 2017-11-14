@@ -24,16 +24,50 @@
                 android:id="@+id/layout_day_picker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="50dp"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <View
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/bg_work"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-->工作"/>
+
+                <View
+                    android:layout_width="20dp"
+                    android:layout_height="0dp"/>
+                <View
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/bg_onduty"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-->值班"/>
+            </LinearLayout>
             <TextView
                 android:id="@+id/tv_goto_time"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
                 android:padding="15dp"
                 android:onClick="onClick"
-                android:text="查看闹钟"/>
+                android:text="点击\n查看闹钟"/>
+            <TextView
+                android:padding="7dp"
+                android:gravity="bottom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="1.手机管家-->锁屏清理应用-->不清理该应用;\n2.手机管家-->自启管理-->允许该应用开机启动；\n3.在最近任务应用列表中锁住该应用；"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
