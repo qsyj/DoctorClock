@@ -391,17 +391,21 @@ public class DateSelectDialog extends DialogFragment implements WheelPicker.OnIt
     }
     public static DateSelectDialog newInstance(OnDaySelectedListener daySelectedListener, int selectYear, int selectMonth, int selectDay, String mode) {
         Calendar calendar = Calendar.getInstance();
-        if (mode.equals(MODEL_UNLIMITED)) {
-            calendar.set(MAX_CALENDAR_YEAR, 11, 30);
+        int maxYear;
+        int maxMonth;
+        int maxDay;
+        if (mode.equals(MODEL_BIRTHDAY)) {
+            maxYear = calendar.get(Calendar.YEAR);
+            maxMonth = calendar.get(Calendar.MONTH) + 1;
+            maxDay = calendar.get(Calendar.DAY_OF_MONTH);
+        } else {
+            maxYear = MAX_CALENDAR_YEAR;
+            maxMonth = 11;
+            maxDay = 30;
         }
-        int maxYear = calendar.get(Calendar.YEAR);
-        int maxMonth = calendar.get(Calendar.MONTH) + 1;
-        int maxDay = calendar.get(Calendar.DAY_OF_MONTH);
-//        Log.e("DateSelectActivity","toNextActivityForResult maxYear:"+maxYear+",maxMonth:"+maxMonth+",maxDay:"+maxDay);
-        calendar.set(MIN_CALENDAR_YEAR, 0, 1);
-        int minYear = calendar.get(Calendar.YEAR);
-        int minMonth = calendar.get(Calendar.MONTH) + 1;
-        int minDay = calendar.get(Calendar.DAY_OF_MONTH);
+        int minYear = MIN_CALENDAR_YEAR;
+        int minMonth = 1;
+        int minDay = 1;
         return DateSelectDialog.newInstance(daySelectedListener,minYear, minMonth, minDay, maxYear, maxMonth, maxDay, selectYear, selectMonth, selectDay,mode);
     }
     public static DateSelectDialog newInstance(OnDaySelectedListener daySelectedListener, int minYear, int minMonth, int minDay, int maxYear,
