@@ -3,6 +3,7 @@ package com.wqlin.clock.utils;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSONObject;
@@ -31,6 +32,12 @@ public class AppUtils {
         return hourOfDay * 60L * 60L + minute * 60L + second * 1L;
     }
 
+    public static void gotoHome(Context context) {
+        Intent home = new Intent(Intent.ACTION_MAIN);
+        home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        home.addCategory(Intent.CATEGORY_HOME);
+        context.startActivity(home);
+    }
     public static TimeEntity createTimeEntity(int mode, int hourOfDay, int minute, int second) {
         TimeEntity timeEntity = new TimeEntity();
         timeEntity.setSeletMode(mode);

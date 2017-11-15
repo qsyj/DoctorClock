@@ -136,6 +136,8 @@ public abstract class MonthView extends View {
     // Optional listener for handling day click actions
     protected OnDayClickListener mOnDayClickListener;
 
+    protected OnTitleClickListener mOnTitleClickListener;
+
     // Whether to prevent setting the accessibility delegate
     private boolean mLockAccessibilityDelegate;
     /**
@@ -152,6 +154,10 @@ public abstract class MonthView extends View {
     protected int mMonthTitleColor;
 
     private SimpleDateFormat weekDayLabelFormatter;
+    private float mTitleWidth;
+    private int mTitleX;
+    private int mTitleY;
+    private float mTitleHeight;
 
     public MonthView(Context context) {
         this(context, null, null);
@@ -231,6 +237,10 @@ public abstract class MonthView extends View {
         mOnDayClickListener = listener;
     }
 
+    public void setOnTitleClickListener(OnTitleClickListener onTitleClickListener) {
+        mOnTitleClickListener = onTitleClickListener;
+    }
+
     @Override
     public boolean dispatchHoverEvent(@NonNull MotionEvent event) {
         // First right-of-refusal goes the touch exploration helper.
@@ -244,7 +254,12 @@ public abstract class MonthView extends View {
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_UP:
-                final int day = getDayFromLocation(event.getX(), event.getY());
+                float x=event.getX();
+                float y = event.getY();
+                if (isShowTitle()&&isClickTitle(x,y)) {
+                    onTitleClick();
+                }
+                final int day = getDayFromLocation(x,y);
                 if (day >= 0) {
                     onDayClick(day);
                 }
@@ -412,9 +427,13 @@ public abstract class MonthView extends View {
 
     protected void drawMonthTitle(Canvas canvas) {
         if (isShowTitle()) {
-            int x = (mWidth + 2 * mEdgePadding) / 2;
-            int y = (getMonthHeaderSize() - MONTH_DAY_LABEL_TEXT_SIZE) / 2;
-            canvas.drawText(getMonthAndYearString(), x, y, mMonthTitlePaint);
+            mTitleX = (mWidth + 2 * mEdgePadding) / 2;
+            mTitleY = (getMonthHeaderSize() - MONTH_DAY_LABEL_TEXT_SIZE) / 2;
+            String titleText = getMonthAndYearString();
+            mTitleWidth = mMonthTitlePaint.measureText(titleText);
+            canvas.drawText(titleText, mTitleX, mTitleY, mMonthTitlePaint);
+            Paint.FontMetrics fontMetrics = mMonthTitlePaint.getFontMetrics();
+            mTitleHeight =fontMetrics.bottom- fontMetrics.top;
         }
     }
 
@@ -524,6 +543,23 @@ public abstract class MonthView extends View {
         return day;
     }
 
+    private boolean isClickTitle(float x, float y) {
+        if (mTitleWidth==0||mTitleHeight==0)
+            return false;
+        float leftX = mTitleX - mTitleWidth / 2;
+        float rightX = mTitleX + mTitleWidth / 2;
+        float topY = mTitleY - mTitleHeight / 2;
+        float bottomY = mTitleY + mTitleHeight / 2;
+        if (x >= leftX && x <= rightX && y >= topY && y <= bottomY) {
+            return true;
+        }
+        return false;
+    }
+    private void onTitleClick() {
+        if (mOnTitleClickListener != null) {
+            mOnTitleClickListener.onTitleClick(this,mYear,mMonth);
+        }
+    }
     /**
      * Called when the user clicks on a day. Handles callbacks to the
      * {@link OnDayClickListener} if one is set.
@@ -794,5 +830,9 @@ public abstract class MonthView extends View {
      */
     public interface OnDayClickListener {
         void onDayClick(MonthView view, CalendarDay day);
+    }
+
+    public interface OnTitleClickListener{
+        void onTitleClick(MonthView view, int year, int month);
     }
 }

@@ -47,7 +47,7 @@ import java.util.TimeZone;
  * @email wangql@leleyuntech.com
  * @date 2017/11/10 14:19
  */
-public class CalendarView extends FrameLayout implements DatePickerController ,MonthView.OnDayClickListener ,View.OnClickListener,DoctorMonthView.DateSelectController{
+public class CalendarView extends FrameLayout implements DatePickerController ,MonthView.OnDayClickListener ,MonthView.OnTitleClickListener,View.OnClickListener,DoctorMonthView.DateSelectController{
     private RelativeLayout rlRoot;
     private LinearLayout llBottom;
     private TextView tvTitle ,tvSure,tvTitleTime;
@@ -130,6 +130,7 @@ public class CalendarView extends FrameLayout implements DatePickerController ,M
         params.addRule(RelativeLayout.BELOW,R.id.rl_top);
         viewMonth.setLayoutParams(params);
         viewMonth.setOnDayClickListener(this);
+        viewMonth.setOnTitleClickListener(this);
         rlRoot.addView(viewMonth);
     }
 
@@ -458,5 +459,20 @@ public class CalendarView extends FrameLayout implements DatePickerController ,M
     @Override
     public DoctorMonthView.MonthViewEntity getMonthViewEntity(int year, int month, int day) {
         return createMonthViewEntity(year,month,day);
+    }
+
+    @Override
+    public void onTitleClick(MonthView view, int year, int month) {
+        showDateSelectDialog(year,month);
+    }
+
+    private void showDateSelectDialog(int year, int month) {
+        DateSelectDialog dialog = DateSelectDialog.newInstance(new DateSelectDialog.OnDaySelectedListener() {
+            @Override
+            public void onDaySelected(int year, int month, int day) {
+                setDate(year, month - 1,day);
+            }
+        },year,month+1,1, DateSelectDialog.MODEL_NOT_DAY);
+        dialog.show(((Activity)getContext()).getFragmentManager(), "showDateSelectDialog");
     }
 }
