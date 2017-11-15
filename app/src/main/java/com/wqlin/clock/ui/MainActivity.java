@@ -3,6 +3,7 @@ package com.wqlin.clock.ui;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wqlin.clock.R;

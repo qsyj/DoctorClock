@@ -2,7 +2,11 @@ package com.loonggg.lib.alarmmanager.clock;
 
 import android.app.Activity;
 import android.app.Service;
+import android.content.Context;
 import android.media.MediaPlayer;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.View;
@@ -23,7 +27,8 @@ public class ClockAlarmActivity extends Activity {
 
     private void showDialogInBroadcastReceiver(String message, final int flag) {
         if (flag == 1 || flag == 2) {
-            mediaPlayer = MediaPlayer.create(this, R.raw.in_call_alarm);
+
+            mediaPlayer = MediaPlayer.create(this,getDefaultRingtoneUri(this,RingtoneManager.TYPE_RINGTONE));// R.raw.in_call_alarm
             mediaPlayer.setLooping(true);
             mediaPlayer.start();
         }
@@ -54,8 +59,29 @@ public class ClockAlarmActivity extends Activity {
                 }
             }
         });
+    }
+    /**
+     *
+     * 获取的是铃声的Uri
+     * @param ctx
+     * @param type RingtoneManager.TYPE_NOTIFICATION;通知声音  RingtoneManager.TYPE_ALARM;警告 RingtoneManager.TYPE_RINGTONE; 铃声
+     * @return
+     */
+    public static Uri getDefaultRingtoneUri(Context ctx, int type) {
 
+        return RingtoneManager.getActualDefaultRingtoneUri(ctx, type);
 
     }
 
+    /**
+     * 获取的是铃声相应的Ringtone
+     * @param ctx
+     * @param type
+     */
+    public Ringtone getDefaultRingtone(Context ctx, int type) {
+
+        return RingtoneManager.getRingtone(ctx,
+                RingtoneManager.getActualDefaultRingtoneUri(ctx, type));
+
+    }
 }
