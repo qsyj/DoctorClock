@@ -168,13 +168,11 @@ public class DateSelectDialog extends DialogFragment implements WheelPicker.OnIt
             MAX_YEAR = mCalendar.get(Calendar.YEAR);
             MAX_YEAR_MONTH = mCalendar.get(Calendar.MONTH);
             MAX_YEAR_DAY = mCalendar.get(Calendar.DAY_OF_MONTH);
-//            mCalendar.clear();
             if (SELECT_DATE > 0) {
                 mCalendar.setTimeInMillis(SELECT_DATE);
                 mSelectedYear = mCalendar.get(Calendar.YEAR);
                 mSelectedMonth = mCalendar.get(Calendar.MONTH) + 1;
                 mSelectedDay = mCalendar.get(Calendar.DAY_OF_MONTH);
-//                Log.e("DateSelectActivity", "setDateRange mSelectedYear:" + mSelectedYear + ",selectMonth:" + mSelectedMonth + ",mSelectedDay:" + mSelectedDay + ",SELECT_DATE:" + SELECT_DATE);
             } else {
                 mSelectedYear = MAX_YEAR;
                 mSelectedMonth = MAX_YEAR_MONTH + 1;
@@ -480,9 +478,6 @@ public class DateSelectDialog extends DialogFragment implements WheelPicker.OnIt
             } else {
                 mSelectedDay = getData((String) data, DAY_TAG);
             }
-//            String currentDate = getCurrentYear() + "-" + getCurrentMonth() + "-" + getCurrentDay();
-//            Log.e("DateSelectActivity", "DateSelectActivity currentDate:" + currentDate);
-//            Log.e("DateSelectActivity", "DateSelectActivity mSelectedYear:" + mSelectedYear+",mSelectedMonth:"+mSelectedMonth+",mSelectedDay:"+mSelectedDay);
         } catch (Exception e) {
             e.printStackTrace();
         }
