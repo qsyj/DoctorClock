@@ -22,9 +22,18 @@
         </activity>
         <activity android:name=".ui.ClockTimeActivity">
         </activity>
+        <activity
+            android:name=".ui.ClockAlarmActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            ></activity>
         <!--<activity android:name=".ui.DateSelectActivity"
                   android:screenOrientation="portrait"
                   android:theme="@style/MyDialogStyleBottom"/>-->
+        <receiver android:name=".receiver.LoongggAlarmReceiver">
+            <intent-filter>
+                <action android:name="com.loonggg.alarm.clock"/>
+            </intent-filter>
+        </receiver>
         <receiver android:name=".receiver.BootBroadcastReceiver"
             android:enabled="true"
             android:exported="true"

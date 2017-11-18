@@ -872,6 +872,7 @@ public class WheelView extends View {
 			recycle.recycleItems(itemsLayout, firstItem, new ItemsRange());
 		} else {
 			createItemsLayout();
+
 		}
 
 		// add views

@@ -5,8 +5,10 @@
       <module fileurl="file://$PROJECT_DIR$/DatePicker/DatePicker.iml" filepath="$PROJECT_DIR$/DatePicker/DatePicker.iml" />
       <module fileurl="file://$PROJECT_DIR$/DoctorClock.iml" filepath="$PROJECT_DIR$/DoctorClock.iml" />
       <module fileurl="file://$PROJECT_DIR$/alarmmanagerclock/alarmmanagerclock.iml" filepath="$PROJECT_DIR$/alarmmanagerclock/alarmmanagerclock.iml" />
+      <module fileurl="file://D:\studioproject\github\DoctorClock\alarmmanagerclock\alarmmanagerclock.iml" filepath="D:\studioproject\github\DoctorClock\alarmmanagerclock\alarmmanagerclock.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/wheel/wheel.iml" filepath="$PROJECT_DIR$/wheel/wheel.iml" />
+      <module fileurl="file://D:\studioproject\github\DoctorClock\wheel\wheel.iml" filepath="D:\studioproject\github\DoctorClock\wheel\wheel.iml" />
     </modules>
   </component>
 </project>

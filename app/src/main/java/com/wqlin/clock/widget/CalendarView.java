@@ -5,17 +5,14 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSONObject;
 import com.wdullaer.materialdatetimepicker.HapticFeedbackController;
 import com.wdullaer.materialdatetimepicker.Utils;
 import com.wdullaer.materialdatetimepicker.date.DatePickerController;
@@ -148,6 +145,7 @@ public class CalendarView extends FrameLayout implements DatePickerController ,M
             dayEntityList = calendarEntity.getDayList();
         }
         mDayList = createDayList(dayEntityList,mCalendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        saveData();
         updataMonthView();
     }
 
@@ -159,7 +157,7 @@ public class CalendarView extends FrameLayout implements DatePickerController ,M
         viewMonth.invalidate();
     }
 
-    public CalendarEntity initCalendarEntity() {
+    private CalendarEntity initCalendarEntity() {
         if (mCalendarEntity == null) {
             mCalendarEntity = new CalendarEntity();
         }

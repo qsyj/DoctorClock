@@ -17,4 +17,8 @@
     <color name="color_circle_work">#5CACEE</color>
     <color name="color_circle_on_duty">#FF0000</color>
     <color name="color_circle_custom_clock">#FF4040</color>
+
+    <color name="title_transparent_black">#22000000</color>
+    <color name="light_black">#141414</color>
+    <color name="line_and_outline_grey">#d9d9d9</color>
 </resources>

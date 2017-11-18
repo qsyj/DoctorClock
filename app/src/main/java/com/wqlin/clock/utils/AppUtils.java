@@ -1,13 +1,10 @@
 package com.wqlin.clock.utils;
 
-import android.app.Activity;
-import android.app.AlarmManager;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSONObject;
-import com.loonggg.lib.alarmmanager.clock.AlarmManagerUtil;
 import com.wqlin.clock.entity.CalendarEntity;
 import com.wqlin.clock.entity.ClockTimeEntity;
 import com.wqlin.clock.entity.DayEntity;
@@ -164,13 +161,16 @@ public class AppUtils {
                 for (DayEntity dayEntity:dayList) {
                     switch (dayEntity.getSeletMode()) {
                         case DayEntity.MODE_DATE_RESET:
-                            startClock(context,year,month,dayEntity,resetEntity);
+                            if (startClock(context,year,month,dayEntity,resetEntity))
+                                return;
                             break;
                         case DayEntity.MODE_DATE_WORK:
-                            startClock(context,year,month,dayEntity,workEntity);
+                            if (startClock(context,year,month,dayEntity,workEntity))
+                                return;
                             break;
                         case DayEntity.MODE_DATE_ON_DUTY:
-                            startClock(context,year,month,dayEntity,onDutyEntity);
+                            if (startClock(context,year,month,dayEntity,onDutyEntity))
+                                return;
                             break;
                     }
                 }
@@ -179,31 +179,35 @@ public class AppUtils {
         }
     }
 
-    public static void startClock(Context context,int year,int month,DayEntity dayEntity,ClockTimeEntity clockTimeEntity) {
+    public static boolean startClock(Context context,int year,int month,DayEntity dayEntity,ClockTimeEntity clockTimeEntity) {
+        boolean isStart = false;
         if (clockTimeEntity==null)
-            return;
+            return isStart;
         if (dayEntity==null)
-            return;
+            return isStart;
         List<TimeEntity> timeList=clockTimeEntity.getTimeList();
         if (timeList==null)
-            return;
+            return isStart;
         int size = timeList.size();
         if (size==0)
-            return;
+            return isStart;
         int mode1 = clockTimeEntity.getSeletMode();
         int mode2 = dayEntity.getSeletMode();
         if (mode1!=mode2)
-            return;
+            return isStart;
         for (TimeEntity timeEntity : timeList) {
             int day = dayEntity.getDay();
             int hour = timeEntity.getHour();
             int minute = timeEntity.getMinute();
             int second = timeEntity.getSecond();
             if (!isBeforeTime(year, month, day, hour, minute, second)) {
-                AlarmManagerUtil.setAlarm(context,0,hour,minute,0,"汪哥叫你起床了",2);
+                Calendar calendar=Calendar.getInstance();
+                calendar.set(year, month, day, hour, minute, 1);
+                AlarmManagerUtil.setAlarm(context,0,calendar.getTimeInMillis(),"汪哥叫你起床了",2);
+                return  true;
             }
-
         }
+        return isStart;
     }
 
     public static boolean isBeforeTime(int year,int month,int day,int hour,int minute,int second) {

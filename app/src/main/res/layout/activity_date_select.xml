@@ -95,10 +95,11 @@
                 android:id="@+id/wp_month"
                 android:layout_width="0dp"
                 android:layout_weight="1"
+                android:layout_height="wrap_content"
                 app:wheel_atmospheric="true"
                 app:wheel_curved="true"
                 app:wheel_cyclic="true"
-                android:layout_height="wrap_content"
+                app:wheel_item_space="12dp"
                 app:wheel_item_text_size="18sp"
                 app:wheel_item_text_color="#B9B9B9"
                 app:wheel_selected_item_text_color="#646464"
@@ -110,16 +111,18 @@
             <com.aigestudio.wheelpicker.WheelPicker
                 android:id="@+id/wp_day"
                 android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                app:wheel_curved="true"
-                app:wheel_item_text_size="18sp"
                 app:wheel_atmospheric="true"
+                app:wheel_curved="true"
+                app:wheel_cyclic="true"
+                app:wheel_item_space="12dp"
+                app:wheel_item_text_size="18sp"
                 app:wheel_item_text_color="#B9B9B9"
                 app:wheel_selected_item_text_color="#646464"
                 app:wheel_indicator="true"
                 app:wheel_indicator_color="#cccccc"
-                app:wheel_indicator_size="1dp"
-                android:layout_weight="1" />
+                app:wheel_indicator_size="1dp" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

@@ -1,4 +1,4 @@
-package com.loonggg.lib.alarmmanager.clock;
+package com.wqlin.clock.utils;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
+import com.wqlin.clock.receiver.LoongggAlarmReceiver;
 
 import java.util.Calendar;
 
